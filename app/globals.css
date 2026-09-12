@@ -3,24 +3,181 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --emphasis: oklch(70.7% 0.022 261.325);
+  --menus: oklch(95.4% 0.038 75.164);
+  --outline: oklch(92.8% 0.006 264.531);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-emphasis: var(--emphasis);
+  --font-sans: "Segoe UI", "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SFMono-Regular", "Consolas", "Liberation Mono", monospace;
+  --color-menus: var(--menus);
+  --color-outline: var(--outline);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --emphasis: oklch(44.6% 0.03 256.802);
+    --menus: oklch(20.436% 0.01526 47.898);
+    --outline: oklch(12.9% 0.042 264.695);
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+main {
+  scrollbar-color: var(--menus) transparent;
+}
+
+/* Global class styles */
+.self-center-both {
+  align-self: center;
+  justify-self: center;
+}
+
+.page-title {
+  @apply text-4xl font-medium tracking-tight mb-4;
+}
+
+.title {
+  @apply text-xl font-normal tracking-tight text-emphasis;
+}
+
+.panel {
+  @apply w-full h-full border border-foreground/60 rounded-lg bg-menus/50;
+}
+
+.panel > span {
+  @apply flex w-full h-12 items-center justify-center text-2xl bg-background/60 rounded-t-lg
+}
+
+.panel > div {
+  @apply w-full h-full object-cover
+}
+
+.full-panel {
+  @apply overflow-x-auto scrollbar-thin scrollbar-thumb-menus/50 scrollbar-track-transparent
+}
+
+.carousel-title {
+  @apply hover:text-foreground transition-colors duration-200;
+
+  &::after {
+    content: ">";
+    display: inline-block;
+    margin-left: 4px;
+    transition: all 0.2s ease-out;
+    font-size: 20px;
+    color: var(--color-emphasis);
+  }
+  &:hover::after {
+    color: var(--foreground);
+    translate: 4px 0;
+  }
+}
+
+.carousel-item {
+  @apply rounded-lg overflow-hidden transition-colors duration-200 
+    border border-foreground/40 hover:border-foreground h-64 aspect-square p-3 m-3;
+
+  & > div  {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+/* Page transition styles */
+@media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+/* Custom styles for the navigation menu */
+.upper-link {
+  list-style: none;
+  color: var(--foreground);
+}
+
+.upper-link a,
+.upper-link svg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--foreground);
+  @apply stroke-foreground/50 h-10 aspect-square transition-colors hover:stroke-foreground/80!;
+}
+
+.side-link {
+  @apply list-none rounded-md transition-colors duration-200 m-2;
+}
+
+.side-link a {
+  @apply rounded-md px-3 py-2.5 text-foreground transition-colors duration-200 hover:bg-emphasis/30;
+  color: var(--foreground);
+}
+
+.side-link a svg {
+  stroke: currentColor;
+  color: var(--foreground);
+}
+
+.side-link.active {
+  @apply bg-menus;
+}
+
+.side-link.active a {
+  @apply bg-transparent;
+  color: var(--foreground);
+}
+
+.side-link a span {
+  transition: translate 0.2s ease-out;
+  color: var(--foreground);
+}
+
+.side-link:hover a span {
+  translate: 6px;
+}
+
+.bottom-button {
+  @apply flex items-center justify-center gap-2 border border-foreground/60 rounded-lg text-center font-medium text-xl p-2 m-1
+    hover:bg-menus/80 transition-colors duration-200;
+
+  & span {
+    transition: translate 0.1s ease-out;
+  }
+  &:hover span {
+    translate: 0 -2px;
+  }
+}
+
+.doc-button {
+  @apply absolute bottom-4 flex h-12 w-12 items-center justify-center rounded-full
+    bg-gray-700/30 text-foreground transition-colors duration-200 hover:bg-menus/80;
+}
+
+.doc-button svg {
+  @apply h-7 w-7;
+}
+
+.text-selection-uniform::selection,
+.text-selection-uniform *::selection {
+  background-color: color-mix(in srgb, var(--emphasis) 35%, transparent);
+  color: var(--foreground);
+}
+
+.text-selection-uniform::-moz-selection,
+.text-selection-uniform *::-moz-selection {
+  background-color: color-mix(in srgb, var(--emphasis) 35%, transparent);
+  color: var(--foreground);
 }
